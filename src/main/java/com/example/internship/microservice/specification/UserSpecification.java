@@ -31,12 +31,4 @@ public class UserSpecification {
             return criteriaBuilder.equal(root.get("active"), active);
         };
     }
-
-    public static Specification<User> hasNameAndSurname(String name, String surname) {
-        return hasName(name).and(hasSurname(surname));
-    }
-
-    public static Specification<User> filterUsers(String name, String surname, Boolean active) {
-        return hasName(name).and(hasSurname(surname)).and(isActive(active));
-    }
 }
