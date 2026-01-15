@@ -22,13 +22,4 @@ public class UserSpecification {
             return criteriaBuilder.like(criteriaBuilder.lower(root.get("surname")), "%" + surname.toLowerCase() + "%");
         };
     }
-
-    public static Specification<User> isActive(Boolean active) {
-        return (root, query, criteriaBuilder) -> {
-            if (active == null) {
-                return criteriaBuilder.conjunction();
-            }
-            return criteriaBuilder.equal(root.get("active"), active);
-        };
-    }
 }

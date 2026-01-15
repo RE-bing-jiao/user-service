@@ -9,21 +9,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-
-
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
 
-    Optional<User> findByEmail(String email);
-
-    List<User> findByNameContainingIgnoreCaseAndSurnameContainingIgnoreCase(String name, String surname);
-
     @Query(value = "SELECT * FROM users WHERE active = :active", nativeQuery = true)
     Page<User> findActiveUsersPaginated(@Param("active") Boolean active, Pageable pageable);
-
-    @Query(value = "SELECT * FROM users WHERE birth_date > :date", nativeQuery = true)
-    List<User> findUsersBornAfterDate(@Param("date") LocalDate date);
 }
