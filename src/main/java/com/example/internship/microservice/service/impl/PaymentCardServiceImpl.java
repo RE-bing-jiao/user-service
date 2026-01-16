@@ -1,5 +1,6 @@
 package com.example.internship.microservice.service.impl;
 
+import com.example.internship.microservice.exception.UniqueConstraintException;
 import com.example.internship.microservice.model.entity.PaymentCard;
 import com.example.internship.microservice.model.entity.User;
 import com.example.internship.microservice.exception.CardLimitExceededException;
@@ -44,6 +45,11 @@ public class PaymentCardServiceImpl implements PaymentCardService {
         if (cardCount >= 5) {
             log.warn(LogMessages.CARD_LIMIT_EXCEEDED, request.getUserId());
             throw new CardLimitExceededException("User cannot have more than 5 payment cards");
+        }
+
+        if (paymentCardRepository.existsByNumber(request.getNumber())) {
+            log.warn("Card number already exists: {}", request.getNumber());
+            throw new UniqueConstraintException("Card number already exists. Please use a different card number.");
         }
 
         PaymentCard card = paymentCardMapper.toEntity(request);

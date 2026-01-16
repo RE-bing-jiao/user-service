@@ -10,7 +10,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -57,5 +56,12 @@ public class GlobalExceptionHandler {
         log.error(LogMessages.ERROR_OCCURRED, "handleGenericException", e.getMessage(), e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ApiResponse.error("An unexpected error occurred: " + e.getMessage()));
+    }
+
+    @ExceptionHandler(UniqueConstraintException.class)
+    public ResponseEntity<ApiResponse<Void>> handleUniqueConstraintException(UniqueConstraintException e) {
+        log.warn(LogMessages.ERROR_OCCURRED, "handleUniqueConstraintException", e.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(ApiResponse.error(e.getMessage()));
     }
 }

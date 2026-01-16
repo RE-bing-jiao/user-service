@@ -1,5 +1,6 @@
 package com.example.internship.microservice.service.impl;
 
+import com.example.internship.microservice.exception.UniqueConstraintException;
 import com.example.internship.microservice.model.entity.User;
 import com.example.internship.microservice.exception.ResourceNotFoundException;
 import com.example.internship.microservice.mapper.UserMapper;
@@ -33,6 +34,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto createUser(UserCreateRequestDto request) {
         log.info(LogMessages.METHOD_START, "createUser");
+        if (userRepository.existsByEmail(request.getEmail())) {
+            log.warn("Email already exists: {}", request.getEmail());
+            throw new UniqueConstraintException("Email already exists. Please use a different email.");
+        }
 
         User user = userMapper.toEntity(request);
         user.setActive(true);
@@ -96,6 +101,11 @@ public class UserServiceImpl implements UserService {
                     log.warn(LogMessages.USER_NOT_FOUND, id);
                     return new ResourceNotFoundException("User not found with id: " + id);
                 });
+
+        if (userRepository.existsByEmail(request.getEmail())) {
+            log.warn("Email already exists: {}", request.getEmail());
+            throw new UniqueConstraintException("Email already exists. Please use a different email.");
+        }
 
         userMapper.updateEntityFromDto(request, user);
         User updatedUser = userRepository.save(user);
