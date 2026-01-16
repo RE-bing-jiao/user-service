@@ -14,7 +14,7 @@ public interface PaymentCardRepository extends JpaRepository<PaymentCard, Long> 
 
     Page<PaymentCard> findByUserId(Long userId, Pageable pageable);
 
-    @Query("SELECT COUNT(pc) FROM PaymentCard pc WHERE pc.user.id = :userId")
+    @Query(value = "SELECT COUNT(*) FROM payment_cards WHERE user_id = :userId", nativeQuery = true)
     Long countByUserId(@Param("userId") Long userId);
 
     @Modifying
