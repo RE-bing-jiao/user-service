@@ -14,7 +14,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="number" type="VARCHAR(255)">
-                <constraints nullable="false"/>
+                <constraints nullable="false" unique="true"/>
             </column>
             <column name="holder" type="VARCHAR(255)">
                 <constraints nullable="false"/>
