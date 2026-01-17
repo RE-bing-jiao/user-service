@@ -16,6 +16,10 @@ import com.example.internship.microservice.service.PaymentCardService;
 import com.example.internship.microservice.utils.LogMessages;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +36,7 @@ public class PaymentCardServiceImpl implements PaymentCardService {
     private final PaymentCardMapper paymentCardMapper;
 
     @Override
+    @CacheEvict(value = "users", key = "#request.userId")
     public PaymentCardDto createCard(PaymentCardCreateRequestDto request) {
         log.info(LogMessages.METHOD_START, "createCard");
 
@@ -65,6 +70,7 @@ public class PaymentCardServiceImpl implements PaymentCardService {
     }
 
     @Override
+    @Cacheable(value = "cards", key = "#id")
     public PaymentCardDto getCardById(Long id) {
         log.info(LogMessages.METHOD_START, "getCardById");
 
@@ -111,6 +117,8 @@ public class PaymentCardServiceImpl implements PaymentCardService {
 
     @Override
     @Transactional
+    @CachePut(value = "cards", key = "#id")
+    @CacheEvict(value = "users", key = "#result.userId")
     public PaymentCardDto updateCard(Long id, PaymentCardUpdateRequestDto request) {
         log.info(LogMessages.METHOD_START, "updateCard");
 
@@ -132,6 +140,8 @@ public class PaymentCardServiceImpl implements PaymentCardService {
 
     @Override
     @Transactional
+    @CachePut(value = "cards", key = "#id")
+    @CacheEvict(value = "users", key = "#result.userId")
     public PaymentCardDto activateCard(Long id) {
         log.info(LogMessages.METHOD_START, "activateCard");
 
@@ -153,6 +163,35 @@ public class PaymentCardServiceImpl implements PaymentCardService {
 
     @Override
     @Transactional
+    @Caching(
+            evict = {
+                    @CacheEvict(value = "cards", key = "#id"),
+                    @CacheEvict(value = "users", key = "#result.userId")
+            }
+    )
+    public void deleteCard(Long id) {
+        log.info(LogMessages.METHOD_START, "deleteCard");
+
+        PaymentCard card = paymentCardRepository.findById(id)
+                .orElseThrow(() -> {
+                    log.warn(LogMessages.CARD_NOT_FOUND, id);
+                    return new ResourceNotFoundException("Payment card not found with id: " + id);
+                });
+
+        paymentCardRepository.delete(card);
+
+        log.info(LogMessages.CARD_DELETED, id);
+        log.info(LogMessages.METHOD_END, "deleteCard");
+    }
+
+    @Override
+    @Transactional
+    @Caching(
+            evict = {
+                    @CacheEvict(value = "cards", key = "#id"),
+                    @CacheEvict(value = "users", key = "#result.userId")
+            }
+    )
     public PaymentCardDto deactivateCard(Long id) {
         log.info(LogMessages.METHOD_START, "deactivateCard");
 
@@ -170,22 +209,5 @@ public class PaymentCardServiceImpl implements PaymentCardService {
         log.info(LogMessages.METHOD_END, "deactivateCard");
 
         return cardDto;
-    }
-
-    @Override
-    @Transactional
-    public void deleteCard(Long id) {
-        log.info(LogMessages.METHOD_START, "deleteCard");
-
-        PaymentCard card = paymentCardRepository.findById(id)
-                .orElseThrow(() -> {
-                    log.warn(LogMessages.CARD_NOT_FOUND, id);
-                    return new ResourceNotFoundException("Payment card not found with id: " + id);
-                });
-
-        paymentCardRepository.delete(card);
-
-        log.info(LogMessages.CARD_DELETED, id);
-        log.info(LogMessages.METHOD_END, "deleteCard");
     }
 }

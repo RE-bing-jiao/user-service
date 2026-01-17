@@ -15,6 +15,9 @@ import com.example.internship.microservice.specification.UserSpecification;
 import com.example.internship.microservice.utils.LogMessages;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -51,6 +54,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable(value = "users", key = "#id")
     public UserDto getUserById(Long id) {
         log.info(LogMessages.METHOD_START, "getUserById");
 
@@ -93,6 +97,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    @CachePut(value = "users", key = "#result.id")
     public UserDto updateUser(Long id, UserUpdateRequestDto request) {
         log.info(LogMessages.METHOD_START, "updateUser");
 
@@ -119,6 +124,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    @CachePut(value = "users", key = "#id")
     public UserDto activateUser(Long id) {
         log.info(LogMessages.METHOD_START, "activateUser");
 
@@ -140,6 +146,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "users", key = "#id")
     public UserDto deactivateUser(Long id) {
         log.info(LogMessages.METHOD_START, "deactivateUser");
 
@@ -163,6 +170,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    @CacheEvict(value = "users", key = "#id")
     public void deleteUser(Long id) {
         log.info(LogMessages.METHOD_START, "deleteUser");
 
