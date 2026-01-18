@@ -10,6 +10,7 @@ public class LogMessages {
     public static final String USER_DELETED = "User deleted successfully with ID: {}";
     public static final String USER_NOT_FOUND = "User not found with ID: {}";
     public static final String USER_SEARCH_STARTED = "Starting user search with name: {}, surname: {}";
+    public static final String USER_EMAIL_DUPLICATE = "Email already exists: {}";
 
     public static final String CARD_CREATED = "Payment card created successfully with ID: {} for user ID: {}";
     public static final String CARD_RETRIEVED = "Payment card retrieved successfully with ID: {}";

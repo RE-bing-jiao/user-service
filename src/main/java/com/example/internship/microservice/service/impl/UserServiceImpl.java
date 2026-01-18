@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
     public UserDto createUser(UserCreateRequestDto request) {
         log.info(LogMessages.METHOD_START, "createUser");
         if (userRepository.existsByEmail(request.getEmail())) {
-            log.warn("Email already exists: {}", request.getEmail());
+            log.warn(LogMessages.USER_EMAIL_DUPLICATE, request.getEmail());
             throw new UniqueConstraintException("Email already exists. Please use a different email.");
         }
 
@@ -108,7 +108,7 @@ public class UserServiceImpl implements UserService {
                 });
 
         if (userRepository.existsByEmail(request.getEmail())) {
-            log.warn("Email already exists: {}", request.getEmail());
+            log.warn(LogMessages.USER_EMAIL_DUPLICATE, request.getEmail());
             throw new UniqueConstraintException("Email already exists. Please use a different email.");
         }
 
