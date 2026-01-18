@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -67,13 +66,13 @@ public class PaymentCardController {
         return ResponseEntity.ok(ApiResponse.success(card, "Payment card updated successfully"));
     }
 
-    @PatchMapping("/{id}/activate")
+    @PutMapping("/{id}/activate")
     public ResponseEntity<ApiResponse<PaymentCardDto>> activateCard(@PathVariable Long id) {
         PaymentCardDto card = paymentCardService.activateCard(id);
         return ResponseEntity.ok(ApiResponse.success(card, "Payment card activated successfully"));
     }
 
-    @PatchMapping("/{id}/deactivate")
+    @PutMapping("/{id}/deactivate")
     public ResponseEntity<ApiResponse<PaymentCardDto>> deactivateCard(@PathVariable Long id) {
         PaymentCardDto card = paymentCardService.deactivateCard(id);
         return ResponseEntity.ok(ApiResponse.success(card, "Payment card deactivated successfully"));

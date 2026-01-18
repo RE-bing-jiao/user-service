@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -58,13 +57,13 @@ public class UserController {
         return ResponseEntity.ok(ApiResponse.success(user, "User updated successfully"));
     }
 
-    @PatchMapping("/{id}/activate")
+    @PutMapping("/{id}/activate")
     public ResponseEntity<ApiResponse<UserDto>> activateUser(@PathVariable Long id) {
         UserDto user = userService.activateUser(id);
         return ResponseEntity.ok(ApiResponse.success(user, "User activated successfully"));
     }
 
-    @PatchMapping("/{id}/deactivate")
+    @PutMapping("/{id}/deactivate")
     public ResponseEntity<ApiResponse<UserDto>> deactivateUser(@PathVariable Long id) {
         UserDto user = userService.deactivateUser(id);
         return ResponseEntity.ok(ApiResponse.success(user, "User deactivated successfully"));
