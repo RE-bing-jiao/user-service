@@ -16,6 +16,8 @@ import com.example.internship.microservice.service.PaymentCardService;
 import com.example.internship.microservice.utils.LogMessages;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -34,6 +36,7 @@ public class PaymentCardServiceImpl implements PaymentCardService {
     private final PaymentCardRepository paymentCardRepository;
     private final UserRepository userRepository;
     private final PaymentCardMapper paymentCardMapper;
+    private final CacheManager cacheManager;
 
     @Override
     @CacheEvict(value = "users", key = "#request.userId")
@@ -163,12 +166,7 @@ public class PaymentCardServiceImpl implements PaymentCardService {
 
     @Override
     @Transactional
-    @Caching(
-            evict = {
-                    @CacheEvict(value = "cards", key = "#id"),
-                    @CacheEvict(value = "users", key = "#result.userId")
-            }
-    )
+    @CacheEvict(value = "cards", key = "#id")
     public void deleteCard(Long id) {
         log.info(LogMessages.METHOD_START, "deleteCard");
 
@@ -177,6 +175,11 @@ public class PaymentCardServiceImpl implements PaymentCardService {
                     log.warn(LogMessages.CARD_NOT_FOUND, id);
                     return new ResourceNotFoundException("Payment card not found with id: " + id);
                 });
+        Long userId = card.getUser().getId();
+        Cache userCache = cacheManager.getCache("users");
+        if (userCache != null) {
+            userCache.evict(userId);
+        }
 
         paymentCardRepository.delete(card);
 
