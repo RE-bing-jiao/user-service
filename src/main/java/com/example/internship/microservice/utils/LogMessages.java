@@ -23,6 +23,7 @@ public class LogMessages {
     public static final String CARD_NOT_FOUND = "Payment card not found with ID: {}";
     public static final String CARD_LIMIT_EXCEEDED = "Card limit exceeded for user ID: {}. Maximum 5 cards allowed.";
     public static final String CARD_USER_NOT_FOUND = "User not found with ID: {} while creating payment card";
+    public static final String CARD_NUMBER_DUPLICATE = "Card number already exists: {}";
 
     public static final String ERROR_OCCURRED = "An error occurred in {}: {}";
     public static final String VALIDATION_ERROR = "Validation error occurred: {}";

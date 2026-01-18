@@ -56,7 +56,7 @@ public class PaymentCardServiceImpl implements PaymentCardService {
         }
 
         if (paymentCardRepository.existsByNumber(request.getNumber())) {
-            log.warn("Card number already exists: {}", request.getNumber());
+            log.warn(LogMessages.CARD_NUMBER_DUPLICATE, request.getNumber());
             throw new UniqueConstraintException("Card number already exists. Please use a different card number.");
         }
 
