@@ -12,8 +12,6 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Component
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserMapper {
@@ -32,6 +30,4 @@ public interface UserMapper {
     void updateEntityFromDto(UserUpdateRequestDto dto, @MappingTarget User entity);
 
     UserDto toDto(User entity);
-
-    List<UserDto> toDtoList(List<User> entities);
 }

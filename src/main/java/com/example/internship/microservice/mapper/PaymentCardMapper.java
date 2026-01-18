@@ -4,10 +4,13 @@ import com.example.internship.microservice.model.dto.paymentcard.PaymentCardCrea
 import com.example.internship.microservice.model.dto.paymentcard.PaymentCardDto;
 import com.example.internship.microservice.model.dto.paymentcard.PaymentCardUpdateRequestDto;
 import com.example.internship.microservice.model.entity.PaymentCard;
-import org.mapstruct.*;
+import org.mapstruct.BeanMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.ReportingPolicy;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
@@ -28,6 +31,4 @@ public interface PaymentCardMapper {
 
     @Mapping(source = "user.id", target = "userId")
     PaymentCardDto toDto(PaymentCard entity);
-
-    List<PaymentCardDto> toDtoList(List<PaymentCard> entities);
 }
