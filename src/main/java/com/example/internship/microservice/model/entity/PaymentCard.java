@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Builder(toBuilder = true)
 @Entity
 @Table(name = "payment_cards")
 @EntityListeners(AuditingEntityListener.class)
