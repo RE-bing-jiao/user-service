@@ -24,6 +24,7 @@
         <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
         <lombok.version>1.18.30</lombok.version>
         <testcontainers.version>1.21.3</testcontainers.version>
+        <sonar.organization>re-bing-jiao</sonar.organization>
     </properties>
 
     <dependencies>
