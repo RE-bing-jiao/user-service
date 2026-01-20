@@ -11,11 +11,6 @@ jobs:
     services:
       redis:
         image: redis:latest
-        options: >-
-          --health-cmd "redis-cli ping"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
         ports:
           - 6379:6379
 
@@ -49,7 +44,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=RE-bing-jiao_user-service
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=RE-bing-jiao_user-service -Dsonar.host.url=https://sonarcloud.io -Dsonar.organization=re-bing-jiao
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -76,7 +71,7 @@ jobs:
         with:
           context: .
           platforms: linux/amd64
-          push: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop' }}
+          push: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/tasks/USR-0' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
