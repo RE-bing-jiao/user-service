@@ -8,6 +8,17 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
+    services:
+      redis:
+        image: redis:latest
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -21,11 +32,6 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
-      - name: Install Docker Compose
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y docker-compose-plugin
-
       - name: Build with Maven
         run: mvn clean package -DskipTests
 
@@ -33,22 +39,11 @@ jobs:
         run: mvn test
 
       - name: Run Integration Tests
-        run: |
-          docker compose up -d postgres redis
-          sleep 30
-          docker exec microservice-redis-1 redis-cli ping
-          mvn verify
+        run: mvn verify
         env:
           SPRING_PROFILES_ACTIVE: test
-          DB_URL: jdbc:postgresql://localhost:5432/testdb
-          DB_USERNAME: postgres
-          DB_PASSWORD: 1234
           REDIS_HOST: redis
           REDIS_PORT: 6379
-
-      - name: Stop Docker Services
-        if: always()
-        run: docker compose down
 
       - name: Analyze with SonarCloud
         env:
