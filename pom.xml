@@ -25,6 +25,7 @@
         <lombok.version>1.18.30</lombok.version>
         <testcontainers.version>1.21.3</testcontainers.version>
         <sonar.organization>re-bing-jiao</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
     <dependencies>
