@@ -35,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Testcontainers
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class PaymentCardControllerIntegrationTest {
+class PaymentCardControllerIntegrationTest {
 
     @Container
     @SuppressWarnings("resource")
