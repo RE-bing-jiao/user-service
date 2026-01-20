@@ -1,0 +1,46 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - DB_URL=jdbc:postgresql://postgres:5432/user_service_db
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=1234
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - app-network
+
+  postgres:
+    image: postgres:18
+    environment:
+      - POSTGRES_DB=user_service_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1234
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgres
+    networks:
+      - app-network
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - app-network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  app-network:
+    driver: bridge
+
