@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
         log.info(LogMessages.METHOD_START, "createUser");
         if (userRepository.existsByEmail(request.getEmail())) {
             log.warn(LogMessages.USER_EMAIL_DUPLICATE, request.getEmail());
-            throw new UniqueConstraintException("Email already exists. Please use a different email.");
+            throw new UniqueConstraintException(LogMessages.EMAIL_DUPLICATE_MESSAGE);
         }
 
         User user = userMapper.toEntity(request);
@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> {
                     log.warn(LogMessages.USER_NOT_FOUND, id);
-                    return new ResourceNotFoundException("User not found with id: " + id);
+                    return new ResourceNotFoundException((LogMessages.USER_NOT_FOUND + id));
                 });
 
         UserDto userDto = userMapper.toDto(user);
@@ -104,12 +104,12 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> {
                     log.warn(LogMessages.USER_NOT_FOUND, id);
-                    return new ResourceNotFoundException("User not found with id: " + id);
+                    return new ResourceNotFoundException(LogMessages.USER_NOT_FOUND + id);
                 });
 
         if (userRepository.existsByEmail(request.getEmail())) {
             log.warn(LogMessages.USER_EMAIL_DUPLICATE, request.getEmail());
-            throw new UniqueConstraintException("Email already exists. Please use a different email.");
+            throw new UniqueConstraintException(LogMessages.EMAIL_DUPLICATE_MESSAGE);
         }
 
         userMapper.updateEntityFromDto(request, user);
@@ -131,7 +131,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> {
                     log.warn(LogMessages.USER_NOT_FOUND, id);
-                    return new ResourceNotFoundException("User not found with id: " + id);
+                    return new ResourceNotFoundException(LogMessages.USER_NOT_FOUND + id);
                 });
 
         user.setActive(true);
@@ -153,7 +153,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> {
                     log.warn(LogMessages.USER_NOT_FOUND, id);
-                    return new ResourceNotFoundException("User not found with id: " + id);
+                    return new ResourceNotFoundException(LogMessages.USER_NOT_FOUND + id);
                 });
 
         user.setActive(false);
@@ -177,7 +177,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> {
                     log.warn(LogMessages.USER_NOT_FOUND, id);
-                    return new ResourceNotFoundException("User not found with id: " + id);
+                    return new ResourceNotFoundException(LogMessages.USER_NOT_FOUND + id);
                 });
 
         userRepository.delete(user);

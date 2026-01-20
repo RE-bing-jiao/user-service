@@ -46,7 +46,7 @@ public class PaymentCardServiceImpl implements PaymentCardService {
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> {
                     log.warn(LogMessages.CARD_USER_NOT_FOUND, request.getUserId());
-                    return new ResourceNotFoundException("User not found with id: " + request.getUserId());
+                    return new ResourceNotFoundException(LogMessages.USER_NOT_FOUND + request.getUserId());
                 });
 
         long cardCount = paymentCardRepository.countByUserId(request.getUserId());
@@ -80,7 +80,7 @@ public class PaymentCardServiceImpl implements PaymentCardService {
         PaymentCard card = paymentCardRepository.findById(id)
                 .orElseThrow(() -> {
                     log.warn(LogMessages.CARD_NOT_FOUND, id);
-                    return new ResourceNotFoundException("Payment card not found with id: " + id);
+                    return new ResourceNotFoundException(LogMessages.CARD_NOT_FOUND + id);
                 });
 
         PaymentCardDto cardDto = paymentCardMapper.toDto(card);
@@ -128,7 +128,7 @@ public class PaymentCardServiceImpl implements PaymentCardService {
         PaymentCard card = paymentCardRepository.findById(id)
                 .orElseThrow(() -> {
                     log.warn(LogMessages.CARD_NOT_FOUND, id);
-                    return new ResourceNotFoundException("Payment card not found with id: " + id);
+                    return new ResourceNotFoundException(LogMessages.CARD_NOT_FOUND + id);
                 });
 
         paymentCardMapper.updateEntityFromDto(request, card);
@@ -151,7 +151,7 @@ public class PaymentCardServiceImpl implements PaymentCardService {
         PaymentCard card = paymentCardRepository.findById(id)
                 .orElseThrow(() -> {
                     log.warn(LogMessages.CARD_NOT_FOUND, id);
-                    return new ResourceNotFoundException("Payment card not found with id: " + id);
+                    return new ResourceNotFoundException(LogMessages.CARD_NOT_FOUND + id);
                 });
 
         card.setActive(true);
@@ -173,7 +173,7 @@ public class PaymentCardServiceImpl implements PaymentCardService {
         PaymentCard card = paymentCardRepository.findById(id)
                 .orElseThrow(() -> {
                     log.warn(LogMessages.CARD_NOT_FOUND, id);
-                    return new ResourceNotFoundException("Payment card not found with id: " + id);
+                    return new ResourceNotFoundException(LogMessages.CARD_NOT_FOUND + id);
                 });
         Long userId = card.getUser().getId();
         Cache userCache = cacheManager.getCache("users");
@@ -201,7 +201,7 @@ public class PaymentCardServiceImpl implements PaymentCardService {
         PaymentCard card = paymentCardRepository.findById(id)
                 .orElseThrow(() -> {
                     log.warn(LogMessages.CARD_NOT_FOUND, id);
-                    return new ResourceNotFoundException("Payment card not found with id: " + id);
+                    return new ResourceNotFoundException(LogMessages.CARD_NOT_FOUND + id);
                 });
 
         card.setActive(false);
