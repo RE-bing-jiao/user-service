@@ -53,6 +53,7 @@ jobs:
           mvn sonar:sonar \
           -Dsonar.projectKey="${{ github.repository_owner }}_${{ github.event.repository.name }}" \
           -Dsonar.organization="re-bing-jiao" \
+          -Dsonar.projectName="user-service" \
           -Dsonar.host.url="https://sonarcloud.io" \
           -Dsonar.sources="src/main" \
           -Dsonar.tests="src/test" \
