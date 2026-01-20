@@ -32,6 +32,6 @@ public class LogMessages {
     public static final String METHOD_START = "Starting execution of method: {}";
     public static final String METHOD_END = "Completed execution of method: {}";
 
-    public LogMessages() {
+    private LogMessages() {
     }
 }
