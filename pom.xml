@@ -13,9 +13,9 @@
     </parent>
 
     <groupId>com.example.internship</groupId>
-    <artifactId>microservice</artifactId>
+    <artifactId>user-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>microservice</name>
+    <name>user-service</name>
     <description>Microservice for Internship Project</description>
     <packaging>jar</packaging>
 
