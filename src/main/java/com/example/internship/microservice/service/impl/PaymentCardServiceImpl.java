@@ -13,7 +13,7 @@ import com.example.internship.microservice.model.dto.paymentcard.PaymentCardUpda
 import com.example.internship.microservice.repository.PaymentCardRepository;
 import com.example.internship.microservice.repository.UserRepository;
 import com.example.internship.microservice.service.PaymentCardService;
-import com.example.internship.microservice.utils.LogMessages;
+import com.example.internship.microservice.util.LogMessages;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.Cache;
@@ -30,6 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
+@Transactional
 @RequiredArgsConstructor
 public class PaymentCardServiceImpl implements PaymentCardService {
 
@@ -73,6 +74,7 @@ public class PaymentCardServiceImpl implements PaymentCardService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     @Cacheable(value = "cards", key = "#id")
     public PaymentCardDto getCardById(Long id) {
         log.info(LogMessages.METHOD_START, "getCardById");
@@ -91,6 +93,7 @@ public class PaymentCardServiceImpl implements PaymentCardService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PagedResponse<PaymentCardDto> getAllCards(int page, int size) {
         log.info(LogMessages.METHOD_START, "getAllCards");
 
@@ -105,6 +108,7 @@ public class PaymentCardServiceImpl implements PaymentCardService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PagedResponse<PaymentCardDto> getCardsByUserId(Long userId, int page, int size) {
         log.info(LogMessages.METHOD_START, "getCardsByUserId");
 
@@ -119,7 +123,6 @@ public class PaymentCardServiceImpl implements PaymentCardService {
     }
 
     @Override
-    @Transactional
     @CachePut(value = "cards", key = "#id")
     @CacheEvict(value = "users", key = "#result.userId")
     public PaymentCardDto updateCard(Long id, PaymentCardUpdateRequestDto request) {
@@ -142,7 +145,6 @@ public class PaymentCardServiceImpl implements PaymentCardService {
     }
 
     @Override
-    @Transactional
     @CachePut(value = "cards", key = "#id")
     @CacheEvict(value = "users", key = "#result.userId")
     public PaymentCardDto activateCard(Long id) {
@@ -165,7 +167,6 @@ public class PaymentCardServiceImpl implements PaymentCardService {
     }
 
     @Override
-    @Transactional
     @CacheEvict(value = "cards", key = "#id")
     public void deleteCard(Long id) {
         log.info(LogMessages.METHOD_START, "deleteCard");
@@ -188,7 +189,6 @@ public class PaymentCardServiceImpl implements PaymentCardService {
     }
 
     @Override
-    @Transactional
     @Caching(
             evict = {
                     @CacheEvict(value = "cards", key = "#id"),

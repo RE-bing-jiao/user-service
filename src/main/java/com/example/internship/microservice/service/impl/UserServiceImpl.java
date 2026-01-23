@@ -12,7 +12,7 @@ import com.example.internship.microservice.repository.PaymentCardRepository;
 import com.example.internship.microservice.repository.UserRepository;
 import com.example.internship.microservice.service.UserService;
 import com.example.internship.microservice.specification.UserSpecification;
-import com.example.internship.microservice.utils.LogMessages;
+import com.example.internship.microservice.util.LogMessages;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
+@Transactional
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
@@ -54,6 +55,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     @Cacheable(value = "users", key = "#id")
     public UserDto getUserById(Long id) {
         log.info(LogMessages.METHOD_START, "getUserById");
@@ -72,6 +74,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PagedResponse<UserDto> getAllUsers(int page, int size, String name, String surname) {
         log.info(LogMessages.METHOD_START, "getAllUsers");
         log.info(LogMessages.USER_SEARCH_STARTED, name, surname);
@@ -96,7 +99,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     @CachePut(value = "users", key = "#result.id")
     public UserDto updateUser(Long id, UserUpdateRequestDto request) {
         log.info(LogMessages.METHOD_START, "updateUser");
@@ -123,7 +125,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     @CachePut(value = "users", key = "#id")
     public UserDto activateUser(Long id) {
         log.info(LogMessages.METHOD_START, "activateUser");
@@ -145,7 +146,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     @CacheEvict(value = "users", key = "#id")
     public UserDto deactivateUser(Long id) {
         log.info(LogMessages.METHOD_START, "deactivateUser");
@@ -169,7 +169,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     @CacheEvict(value = "users", key = "#id")
     public void deleteUser(Long id) {
         log.info(LogMessages.METHOD_START, "deleteUser");
