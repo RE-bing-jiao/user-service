@@ -1,12 +1,12 @@
 package com.example.internship.microservice.specification;
 
 import com.example.internship.microservice.model.entity.User;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserSpecification {
-
-    private UserSpecification() {
-    }
 
     public static Specification<User> hasName(String name) {
         return (root, query, criteriaBuilder) -> {
