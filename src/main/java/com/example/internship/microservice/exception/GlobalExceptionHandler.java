@@ -1,7 +1,7 @@
 package com.example.internship.microservice.exception;
 
 import com.example.internship.microservice.model.dto.ApiResponse;
-import com.example.internship.microservice.utils.LogMessages;
+import com.example.internship.microservice.util.LogMessages;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
