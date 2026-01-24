@@ -103,10 +103,26 @@
             <version>2.0.3</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.redis.testcontainers</groupId>
+            <artifactId>testcontainers-redis</artifactId>
+            <version>1.6.4</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <systemPropertyVariables>
+                        <testcontainers.reuse.enable>true</testcontainers.reuse.enable>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
