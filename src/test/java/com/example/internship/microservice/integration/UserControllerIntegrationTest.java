@@ -7,6 +7,7 @@ import com.example.internship.microservice.model.dto.user.UserDto;
 import com.example.internship.microservice.model.dto.user.UserUpdateRequestDto;
 import com.example.internship.microservice.model.entity.User;
 import com.example.internship.microservice.repository.UserRepository;
+import com.redis.testcontainers.RedisContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -37,10 +39,15 @@ class UserControllerIntegrationTest {
 
     @Container
     @SuppressWarnings("resource")
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15")
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(
+            DockerImageName.parse("postgres:15"))
             .withDatabaseName("testdb")
             .withUsername("test")
             .withPassword("test");
+
+    @Container
+    static RedisContainer redis = new RedisContainer(
+            DockerImageName.parse("redis:7-alpine"));
 
     @DynamicPropertySource
     static void configureProperties(DynamicPropertyRegistry registry) {
@@ -50,6 +57,10 @@ class UserControllerIntegrationTest {
         registry.add("spring.datasource.password", postgres::getPassword);
         registry.add("spring.datasource.driver-class-name", () ->
                 "org.testcontainers.jdbc.ContainerDatabaseDriver");
+
+        registry.add("spring.data.redis.host", redis::getHost);
+        registry.add("spring.data.redis.port", redis::getFirstMappedPort);
+        registry.add("spring.cache.type", () -> "redis");
     }
 
     @Autowired
