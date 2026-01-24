@@ -36,6 +36,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
 
     @Override
+    @CachePut(value = "users", key = "#result.id")
     public UserDto createUser(UserCreateRequestDto request) {
         log.info(LogMessages.METHOD_START, "createUser");
         if (userRepository.existsByEmail(request.getEmail())) {

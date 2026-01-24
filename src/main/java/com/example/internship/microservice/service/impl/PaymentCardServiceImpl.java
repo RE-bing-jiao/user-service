@@ -41,6 +41,7 @@ public class PaymentCardServiceImpl implements PaymentCardService {
 
     @Override
     @CacheEvict(value = "users", key = "#request.userId")
+    @CachePut(value = "cards", key = "#result.id")
     public PaymentCardDto createCard(PaymentCardCreateRequestDto request) {
         log.info(LogMessages.METHOD_START, "createCard");
 
